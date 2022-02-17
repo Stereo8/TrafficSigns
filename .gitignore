@@ -17,7 +17,8 @@ dist-ssr
 coverage
 *.local
 
-statika
+django-projekat/Znaci/static/srbija/*
+django-projekat/statika/srbija/*
 
 .vscode/*
 !.vscode/extensions.json
