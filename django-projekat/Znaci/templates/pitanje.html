@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block title %} Korisnik {% endblock title %}
+
+
+
+{% block content %}
+{% load static %}
+    <div class="row mt-2">
+        <h1 class="display-3">Pitanje</h1>
+
+    </div>
+
+    <div class="row mt-2">
+        
+        <img src=" {% static 'srbija/' %}{{ pitanje.znak }}" alt="My image" width="250" height="250">
+        <hr><br/>
+        
+    </div>
+
+    <div class="row mt-2">
+        <div>
+            <p class="bg-success">{{ pitanje.tacan_odg }}</p>
+            <p class="bg-danger">{{ pitanje.netacni_odg2 }}</p>
+            <p class="bg-danger">{{ pitanje.netacni_odg1 }}</p>
+        </div>
+    </div>
+
+{% endblock content %}
