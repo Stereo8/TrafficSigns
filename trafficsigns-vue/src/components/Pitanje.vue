@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { reactive } from "vue";
 import { onMounted } from "vue";
 import { NButton } from "naive-ui";
+import { apiSlikeUrl } from "@/util";
 
 interface Pitanje {
   znak: string;
@@ -25,23 +26,14 @@ const props = defineProps({
 
 const emit = defineEmits(["tacan", "netacan"]);
 
-function checkOdgovor(odg: String) {
-  if (odg == pitanje.value.tacan_odg) {
-    emit("tacan");
-  } else {
-    emit("netacan");
-  }
-}
-
 let p: Pitanje = await fetch(props.urlPitanja)
   .then((response) => response.json())
   .then((data) => data);
 
 const pitanje = ref(p);
-
-const slikaURL = ref(
-  new String("http://localhost:8000/static/srbija/" + pitanje.value.znak)
-);
+const shaking = ref(false);
+const glowingRed = ref(false);
+const glowingGreen = ref(false);
 
 const listaOdgovora = reactive({
   value: [
@@ -50,6 +42,24 @@ const listaOdgovora = reactive({
     pitanje.value.netacni_odg2,
   ],
 });
+
+function checkOdgovor(odg: String) {
+  if (odg == pitanje.value.tacan_odg) {
+    emit("tacan");
+  } else {
+    protresi();
+    setTimeout(() => {
+      emit("netacan");
+    }, 1000);
+  }
+}
+
+function protresi() {
+  shaking.value = true;
+  setTimeout(() => {
+    shaking.value = false;
+  }, 850);
+}
 
 shuffle(listaOdgovora.value);
 
@@ -68,8 +78,6 @@ watch(
       pitanje.value.netacni_odg2,
     ];
     shuffle(listaOdgovora.value);
-    slikaURL.value =
-      "http://localhost:8000/static/srbija/" + pitanje.value.znak;
   }
 );
 </script>
@@ -77,26 +85,97 @@ watch(
 <template>
   <div class="pitanje">
     <div class="slikaPitanja">
-      <img :src="slikaURL" :alt="pitanje.opis" />
+      <img
+        :class="{ shake: shaking }"
+        :src="apiSlikeUrl + pitanje.znak"
+        :alt="pitanje.tacan_odg"
+      />
     </div>
 
     <section class="odgovori">
-      <NButton @click="checkOdgovor(listaOdgovora.value[0])">{{
-        listaOdgovora.value[0]
-      }}</NButton>
-      <NButton @click="checkOdgovor(listaOdgovora.value[1])">{{
-        listaOdgovora.value[1]
-      }}</NButton>
-      <NButton @click="checkOdgovor(listaOdgovora.value[2])">{{
-        listaOdgovora.value[2]
-      }}</NButton>
+      <template v-for="odgovor in listaOdgovora.value">
+        <NButton @click="checkOdgovor(odgovor)"
+          ><p class="tekstPitanja">{{ odgovor }}</p></NButton
+        >
+      </template>
     </section>
   </div>
 </template>
 
 <style>
-NButton {
+.glowContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+.tekstPitanja {
   overflow-wrap: break-word;
+}
+
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+
+.glowRed {
+  animation-name: glowRed;
+  animation-duration: 0.8s;
+}
+
+.glowGreen {
+  animation-name: glowGreen;
+  animation-duration: 0.8s;
+}
+
+@keyframes glowRed {
+  0% {
+    box-shadow: 0 0 0 red;
+  }
+
+  50% {
+    box-shadow: 0 0 60px red;
+  }
+
+  100% {
+    box-shadow: 0 0 0 red;
+  }
+}
+
+@keyframes glowGreen {
+  0% {
+    box-shadow: 0 0 0 green;
+  }
+
+  50% {
+    box-shadow: 0 0 60px green;
+  }
+
+  100% {
+    box-shadow: 0 0 0 green;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 
 .odgovori {
@@ -109,17 +188,19 @@ NButton {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5rem;
+  gap: 3rem;
+  max-width: 300px;
 }
 
 .slikaPitanja {
   display: inline-block;
+  border-radius: 25%;
   max-width: 100%;
-  max-height: 400px;
+  height: 200px;
 }
 
 .slikaPitanja img {
   max-width: 100%;
-  height: auto;
+  max-height: 200px;
 }
 </style>

@@ -1,0 +1,166 @@
+<script setup lang="ts">
+import PitanjeVue from "@/components/Pitanje.vue";
+import { getRandId, apiUrl } from "@/util";
+import { Suspense, ref, computed, watch } from "vue";
+import { NSpin, NProgress } from "naive-ui";
+import VueGlow from "vue-glow";
+
+const idPitanja = ref(getRandId().toString());
+
+const brTacnih = ref(0);
+const brNetacnih = ref(0);
+const brPoena = ref(0);
+const tajmer = ref(180);
+const expandTacni = ref(false);
+const expandNetacni = ref(false);
+
+const urlPitanja = computed(() => apiUrl + idPitanja.value);
+
+function tacanHandler() {
+  expandTacni.value = true;
+  setTimeout(() => {
+    expandTacni.value = false;
+  }, 1000);
+  brTacnih.value++;
+  brPoena.value += 100;
+  idPitanja.value = getRandId().toString();
+}
+
+function netacanHandler() {
+  expandNetacni.value = true;
+  setTimeout(() => {
+    expandNetacni.value = false;
+  }, 1000);
+  brNetacnih.value++;
+  brPoena.value -= 50;
+  idPitanja.value = getRandId().toString();
+}
+
+watch(
+  tajmer,
+  (novi, stari) => {
+    setTimeout(() => {
+      tajmer.value = tajmer.value - 1;
+    }, 1000);
+  },
+  { immediate: true }
+);
+</script>
+
+<template>
+  <div class="parent">
+    <div
+      :class="{
+        brTacnih: true,
+        expand: expandTacni,
+      }"
+    >
+      {{ brTacnih ? brTacnih : "0" }}
+    </div>
+    <div
+      :class="{
+        brNetacnih: true,
+        expand: expandNetacni,
+      }"
+    >
+      {{ brNetacnih ? brNetacnih : "0" }}
+    </div>
+    <div class="pitanjeContainer">
+      <Suspense>
+        <template #default>
+          <PitanjeVue
+            :url-pitanja="urlPitanja"
+            @tacan="tacanHandler"
+            @netacan="netacanHandler"
+          ></PitanjeVue>
+        </template>
+
+        <template #fallback>
+          <NSpin size="large" id="vrti"></NSpin>
+        </template>
+      </Suspense>
+    </div>
+    <div class="brPoena">{{ brPoena ? brPoena : "0" }}</div>
+    <div class="tajmer">
+      <NProgress
+        type="line"
+        color="#18a058"
+        :percentage="Math.round(tajmer / 1.8)"
+        unit=""
+        :height="24"
+        :show-indicator="false"
+      ></NProgress>
+    </div>
+    <div class="rekl1"></div>
+    <div class="rekl2"></div>
+  </div>
+</template>
+
+<style>
+.expand {
+  animation-name: expand;
+  animation-duration: 0.8s;
+}
+
+@keyframes expand {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 4;
+  }
+
+  100% {
+    scale: 1;
+  }
+}
+
+.parent {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 0.3fr;
+  grid-template-rows: 0.2fr 1fr 0.1fr;
+  grid-column-gap: 3px;
+  grid-row-gap: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.brTacnih {
+  grid-area: 1 / 1 / 2 / 2;
+  color: green;
+  text-align: center;
+  font-weight: bolder;
+  font-size: large;
+}
+.brNetacnih {
+  grid-area: 1 / 3 / 2 / 4;
+  color: crimson;
+  text-align: center;
+  font-weight: bolder;
+  font-size: large;
+}
+.pitanjeContainer {
+  grid-area: 2 / 2 / 3 / 3;
+  display: flex;
+  justify-content: center;
+}
+.brPoena {
+  grid-area: 1 / 2 / 2 / 3;
+  text-align: center;
+}
+.tajmer {
+  grid-area: 3 / 1 / 4 / 4;
+  text-align: center;
+  padding: 1rem;
+}
+/* .rekl1 {
+  grid-area: 2 / 1 / 3 / 2;
+}
+.rekl2 {
+  grid-area: 2 / 3 / 3 / 4;
+} */
+</style>
