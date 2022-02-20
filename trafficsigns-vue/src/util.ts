@@ -7,5 +7,7 @@ export function getRandId(min: number = 1017, max: number = 1524): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export const apiUrl = "http://localhost:8000/znaci/pitanje/";
-export const apiSlikeUrl = "http://localhost:8000/static/srbija/";
+const host = "localhost";
+
+export const apiUrl = `http://${host}:8000/znaci/pitanje/`;
+export const apiSlikeUrl = `http://${host}:8000/static/srbija/`;

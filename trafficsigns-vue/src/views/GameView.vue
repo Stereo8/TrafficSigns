@@ -4,12 +4,12 @@ import { getRandId, apiUrl } from "@/util";
 import { Suspense, ref, computed, watch } from "vue";
 import { NSpin, NProgress } from "naive-ui";
 import VueGlow from "vue-glow";
+import { useStore } from "@/stores/appState";
 
 const idPitanja = ref(getRandId().toString());
 
-const brTacnih = ref(0);
-const brNetacnih = ref(0);
-const brPoena = ref(0);
+const store = useStore();
+
 const tajmer = ref(180);
 const expandTacni = ref(false);
 const expandNetacni = ref(false);
@@ -21,8 +21,8 @@ function tacanHandler() {
   setTimeout(() => {
     expandTacni.value = false;
   }, 1000);
-  brTacnih.value++;
-  brPoena.value += 100;
+  store.brTacnih++;
+  store.brPoena += 100;
   idPitanja.value = getRandId().toString();
 }
 
@@ -31,14 +31,17 @@ function netacanHandler() {
   setTimeout(() => {
     expandNetacni.value = false;
   }, 1000);
-  brNetacnih.value++;
-  brPoena.value -= 50;
+  store.brNetacnih++;
+  store.brPoena -= 50;
   idPitanja.value = getRandId().toString();
 }
 
 watch(
   tajmer,
   (novi, stari) => {
+    if (novi <= 0) {
+      store.stanje = "kraj";
+    }
     setTimeout(() => {
       tajmer.value = tajmer.value - 1;
     }, 1000);
@@ -55,7 +58,7 @@ watch(
         expand: expandTacni,
       }"
     >
-      {{ brTacnih ? brTacnih : "0" }}
+      {{ store.brTacnih }}
     </div>
     <div
       :class="{
@@ -63,7 +66,7 @@ watch(
         expand: expandNetacni,
       }"
     >
-      {{ brNetacnih ? brNetacnih : "0" }}
+      {{ store.brNetacnih }}
     </div>
     <div class="pitanjeContainer">
       <Suspense>
@@ -80,7 +83,7 @@ watch(
         </template>
       </Suspense>
     </div>
-    <div class="brPoena">{{ brPoena ? brPoena : "0" }}</div>
+    <div class="brPoena">{{ store.brPoena }}</div>
     <div class="tajmer">
       <NProgress
         type="line"

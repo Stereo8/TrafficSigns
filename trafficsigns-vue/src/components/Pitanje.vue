@@ -32,26 +32,29 @@ let p: Pitanje = await fetch(props.urlPitanja)
 
 const pitanje = ref(p);
 const shaking = ref(false);
-const glowingRed = ref(false);
-const glowingGreen = ref(false);
+const colorG = ref(false);
 
-const listaOdgovora = reactive({
-  value: [
-    pitanje.value.tacan_odg,
-    pitanje.value.netacni_odg1,
-    pitanje.value.netacni_odg2,
-  ],
-});
+const listaOdgovora = ref([
+  { tekst: pitanje.value.tacan_odg, tacan: true },
+  { tekst: pitanje.value.netacni_odg1, tacan: false },
+  { tekst: pitanje.value.netacni_odg2, tacan: false },
+]);
 
-function checkOdgovor(odg: String) {
-  if (odg == pitanje.value.tacan_odg) {
+function checkOdgovor(tacnost: boolean, event: Event) {
+  if (tacnost) {
     emit("tacan");
   } else {
     protresi();
+    obojZeleno();
     setTimeout(() => {
       emit("netacan");
     }, 1000);
   }
+}
+
+function obojZeleno() {
+  colorG.value = true;
+  setTimeout(() => (colorG.value = false), 800);
 }
 
 function protresi() {
@@ -73,9 +76,9 @@ watch(
       .then((data) => data);
 
     listaOdgovora.value = [
-      pitanje.value.tacan_odg,
-      pitanje.value.netacni_odg1,
-      pitanje.value.netacni_odg2,
+      { tekst: pitanje.value.tacan_odg, tacan: true },
+      { tekst: pitanje.value.netacni_odg1, tacan: false },
+      { tekst: pitanje.value.netacni_odg2, tacan: false },
     ];
     shuffle(listaOdgovora.value);
   }
@@ -93,9 +96,11 @@ watch(
     </div>
 
     <section class="odgovori">
-      <template v-for="odgovor in listaOdgovora.value">
-        <NButton @click="checkOdgovor(odgovor)"
-          ><p class="tekstPitanja">{{ odgovor }}</p></NButton
+      <template v-for="odgovor in listaOdgovora">
+        <NButton
+          :class="{ colorGreen: colorG && odgovor.tacan }"
+          @click="checkOdgovor(odgovor.tacan, $event)"
+          ><p class="tekstPitanja">{{ odgovor.tekst }}</p></NButton
         >
       </template>
     </section>
@@ -120,41 +125,22 @@ watch(
   transform: translate3d(0, 0, 0);
 }
 
-.glowRed {
-  animation-name: glowRed;
+.colorGreen {
+  animation-name: colorGreen;
   animation-duration: 0.8s;
 }
 
-.glowGreen {
-  animation-name: glowGreen;
-  animation-duration: 0.8s;
-}
-
-@keyframes glowRed {
+@keyframes colorGreen {
   0% {
-    box-shadow: 0 0 0 red;
+    background-color: #000;
   }
 
-  50% {
-    box-shadow: 0 0 60px red;
+  30% {
+    background-color: green;
   }
 
   100% {
-    box-shadow: 0 0 0 red;
-  }
-}
-
-@keyframes glowGreen {
-  0% {
-    box-shadow: 0 0 0 green;
-  }
-
-  50% {
-    box-shadow: 0 0 60px green;
-  }
-
-  100% {
-    box-shadow: 0 0 0 green;
+    background-color: green;
   }
 }
 
