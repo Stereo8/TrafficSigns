@@ -3,7 +3,6 @@ import PitanjeVue from "@/components/Pitanje.vue";
 import { getRandId, apiUrl } from "@/util";
 import { Suspense, ref, computed, watch } from "vue";
 import { NSpin, NProgress } from "naive-ui";
-import VueGlow from "vue-glow";
 import { useStore } from "@/stores/appState";
 
 const idPitanja = ref(getRandId().toString());

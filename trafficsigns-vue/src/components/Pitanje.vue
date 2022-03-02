@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { reactive } from "vue";
 import { onMounted } from "vue";
+import { Transition } from "vue";
 import { NButton } from "naive-ui";
 import { apiSlikeUrl } from "@/util";
 
@@ -92,13 +93,14 @@ watch(
         :class="{ shake: shaking }"
         :src="apiSlikeUrl + pitanje.znak"
         :alt="pitanje.tacan_odg"
+        :key="pitanje.znak"
       />
     </div>
 
     <section class="odgovori">
       <template v-for="odgovor in listaOdgovora">
         <NButton
-          :class="{ colorGreen: colorG && odgovor.tacan }"
+          :class="{ colorGreen: colorG && odgovor.tacan, dugme: true }"
           @click="checkOdgovor(odgovor.tacan, $event)"
           ><p class="tekstPitanja">{{ odgovor.tekst }}</p></NButton
         >
@@ -108,20 +110,6 @@ watch(
 </template>
 
 <style>
-.glowContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 100px;
-  width: 100px;
-  border-radius: 50%;
-}
-.tekstPitanja {
-  color: #000;
-  border-color: #000;
-  overflow-wrap: break-word;
-}
-
 .shake {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
@@ -166,6 +154,11 @@ watch(
   }
 }
 
+.dugme {
+  padding: 1.7rem 1rem;
+  white-space: normal;
+}
+
 .odgovori {
   display: flex;
   flex-direction: column;
@@ -178,7 +171,7 @@ watch(
   flex-direction: column;
   align-items: center;
   gap: 3rem;
-  max-width: 300px;
+  max-width: 100%;
 }
 
 .slikaPitanja {
