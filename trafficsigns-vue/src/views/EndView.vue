@@ -37,13 +37,24 @@ const store = useStore();
   margin-top: 5rem;
 }
 .end-text {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
   display: inline-block;
   font-weight: bold;
   font-size: larger;
   margin: auto;
 }
+.end-stats{
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
 .restart-button {
-  margin-top: 3rem;
-  padding: 2rem;
+  background: rgb(212,0,0);
+  background: linear-gradient(90deg, rgba(212,0,0,1) 10%, rgba(203,24,18,0.1600841020001751) 56%, rgba(0,26,255,1) 100%);
+  border:2px solid #ffffff;
+  color: white;
+  border-radius: 10px;
+  margin-top: 2rem;
+  padding: 2rem 4rem;
 }
 </style>

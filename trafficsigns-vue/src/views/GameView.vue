@@ -10,19 +10,19 @@ const idPitanja = ref(getRandId().toString());
 
 const store = useStore();
 
-const tajmer = ref(180);
+const tajmer = ref(90);
 const expandTacni = ref(false);
 const expandNetacni = ref(false);
 
 const urlPitanja = computed(() => apiUrl + idPitanja.value);
-
 function tacanHandler() {
   expandTacni.value = true;
   setTimeout(() => {
     expandTacni.value = false;
   }, 1000);
   store.brTacnih++;
-  store.brPoena += 100;
+  if (store.brTacnih == 0) store.brPoena += 100;
+  else store.brPoena += (100 * (2 * store.brTacnih - store.brNetacnih)) / 2;
   idPitanja.value = getRandId().toString();
 }
 
@@ -32,7 +32,9 @@ function netacanHandler() {
     expandNetacni.value = false;
   }, 1000);
   store.brNetacnih++;
-  store.brPoena -= 50;
+  if (store.brTacnih == 0) store.brPoena -= 100;
+  else store.brPoena -= (100 * (2 * store.brTacnih - store.brNetacnih)) / 2;
+  if (store.brPoena < 0) store.brPoena = 0;
   idPitanja.value = getRandId().toString();
 }
 
@@ -88,7 +90,7 @@ watch(
       <NProgress
         type="line"
         color="#18a058"
-        :percentage="Math.round(tajmer / 1.8)"
+        :percentage="tajmer / 1.8"
         unit=""
         :height="24"
         :show-indicator="false"
@@ -119,6 +121,7 @@ watch(
 }
 
 .parent {
+  background-color: rgba(255, 255, 255, 0.9);
   width: 100%;
   display: grid;
   grid-template-columns: 0.3fr 1fr 0.3fr;
@@ -147,11 +150,13 @@ watch(
   font-size: large;
 }
 .pitanjeContainer {
+  background-color: rgba(255, 255, 255, 0.9);
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   justify-content: center;
 }
 .brPoena {
+  color: black;
   grid-area: 1 / 2 / 2 / 3;
   text-align: center;
 }

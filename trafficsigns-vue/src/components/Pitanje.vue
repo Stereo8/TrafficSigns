@@ -117,6 +117,8 @@ watch(
   border-radius: 50%;
 }
 .tekstPitanja {
+  color: #000;
+  border-color: #000;
   overflow-wrap: break-word;
 }
 
@@ -168,6 +170,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 16px;
+  color: black;
 }
 .pitanje {
   margin: 0.5em;
