@@ -102,6 +102,7 @@ watch(
         <NButton
           :class="{ colorGreen: colorG && odgovor.tacan, dugme: true }"
           @click="checkOdgovor(odgovor.tacan, $event)"
+          :focusable="false"
           ><p class="tekstPitanja">{{ odgovor.tekst }}</p></NButton
         >
       </template>
@@ -156,7 +157,7 @@ watch(
 
 .dugme {
   padding: 1.7rem 1rem;
-  white-space: normal;
+  white-space: break-spaces;
 }
 
 .odgovori {
