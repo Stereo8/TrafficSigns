@@ -100,7 +100,11 @@ watch(
     <section class="odgovori">
       <template v-for="odgovor in listaOdgovora">
         <NButton
-          :class="{ colorGreen: colorG && odgovor.tacan, dugme: true }"
+          :class="{
+            colorGreen: colorG && odgovor.tacan,
+            dugme: true,
+            tekstPitanja: true,
+          }"
           @click="checkOdgovor(odgovor.tacan, $event)"
           :focusable="false"
           ><p class="tekstPitanja">{{ odgovor.tekst }}</p></NButton
@@ -116,6 +120,9 @@ watch(
   transform: translate3d(0, 0, 0);
 }
 
+.tekstPitanja {
+  color: black;
+}
 .colorGreen {
   animation-name: colorGreen;
   animation-duration: 0.8s;

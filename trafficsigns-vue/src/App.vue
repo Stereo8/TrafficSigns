@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import { NConfigProvider, useOsTheme, darkTheme } from "naive-ui";
+import { NConfigProvider, useOsTheme, darkTheme, lightTheme } from "naive-ui";
 import { useStore } from "@/stores/appState";
 import { useRouter } from "vue-router";
 
@@ -27,7 +27,7 @@ store.$subscribe((mutation, state) => {
 </script>
 
 <template>
-  <NConfigProvider :theme="darkTheme">
+  <NConfigProvider :theme="lightTheme">
     <RouterView></RouterView>
   </NConfigProvider>
 </template>

@@ -120,7 +120,8 @@ watch(
 }
 
 .parent {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.93);
+  border-radius: 18px;
   width: 100%;
   display: grid;
   grid-template-columns: 0.3fr 1fr 0.3fr;
@@ -149,7 +150,6 @@ watch(
   font-size: large;
 }
 .pitanjeContainer {
-  background-color: rgba(255, 255, 255, 0.9);
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   justify-content: center;
