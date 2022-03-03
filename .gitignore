@@ -228,3 +228,4 @@ django-projekat/statika/fontawesome/webfonts/fa-solid-900.woff2
 django-projekat/Znaci/static/__init__.py
 django-projekat/Znaci/static/Ikona iOS(1).png
 django-projekat/Znaci/static/pozadina.jpg
+django-projekat/package-lock.json
