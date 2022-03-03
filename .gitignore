@@ -20,7 +20,7 @@ coverage
 django-projekat/Znaci/static/srbija/*
 django-projekat/statika/srbija/*
 
-.vscode/*
+
 !.vscode/extensions.json
 .idea
 *.suo

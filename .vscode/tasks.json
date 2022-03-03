@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "path": "trafficsigns-vue/",
+      "problemMatcher": [],
+      "label": "Vue Local Server",
+      "detail": "vite",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Django Local Server",
+      "detail": "python manage.py runserver",
+      "type": "shell",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "command": "${workspaceFolder}/scripts/backend.sh",
+      "problemMatcher": [],
+      "windows": {
+        "command": "${workspaceFolder}/scripts/backend.bat"
+      }
+    },
+    {
+      "label": "Django Outside Server",
+      "detail": "python manage.py runserver",
+      "type": "shell",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "clear": true
+      },
+      "command": "${workspaceFolder}/scripts/backend.sh -h",
+      "problemMatcher": [],
+      "windows": {
+        "command": "${workspaceFolder}/scripts/backend.bat -h"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "serve",
+      "path": "trafficsigns-vue/",
+      "problemMatcher": [],
+      "label": "Vue Outside Server",
+      "detail": "vite --host"
+    }
+  ]
+}
