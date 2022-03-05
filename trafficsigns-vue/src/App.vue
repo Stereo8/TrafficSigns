@@ -43,6 +43,6 @@ store.$subscribe((mutation, state) => {
 body {
   display: flex;
   justify-content: center;
-  background-image: url("http://localhost:8000/static/pozadina.jpg");
+  background-image: url("/pozadina.jpg");
 }
 </style>
